@@ -4,5 +4,9 @@ cmake_minimum_required (VERSION 3.1)
 ADD_DEFINITIONS(-DASIO_STANDALONE)
 include_directories(${CMAKE_SOURCE_DIR}/opt/asio-1.12.1/asio-1.12.1/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/chatproto)
 
-add_executable(chat chat_client.cpp)
+
+aux_source_directory(${CMAKE_SOURCE_DIR}/chatproto CHAT_PROTO_SRC)
+
+add_executable(chat_client chat_client.cpp ${CHAT_PROTO_SRC})

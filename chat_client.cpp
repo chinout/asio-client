@@ -32,7 +32,7 @@ public:
 
   void write(const chat_message& msg)
   {
- 
+    asio::post(io_context_,
         [this, msg]()
         {
           bool write_in_progress = !write_msgs_.empty();
@@ -41,7 +41,7 @@ public:
           {
             do_write();
           }
-        }
+        });
   }
 
   void close()
@@ -60,7 +60,6 @@ private:
             do_read_header();
           }
         });
-
   }
 
   void do_read_header()
@@ -128,14 +127,20 @@ private:
   chat_message_queue write_msgs_;
 };
 
-int main()
+int main(int argc, char* argv[])
 {
   try
   {
+    if (argc != 3)
+    {
+      std::cerr << "Usage: chat_client <host> <port>\n";
+      return 1;
+    }
+
     asio::io_context io_context;
 
     tcp::resolver resolver(io_context);
-    auto endpoints = resolver.resolve("192.168.8.117", "3100");
+    auto endpoints = resolver.resolve(argv[1], argv[2]);
     chat_client c(io_context, endpoints);
 
     std::thread t([&io_context](){ io_context.run(); });
