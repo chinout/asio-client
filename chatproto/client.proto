@@ -1,0 +1,11 @@
+syntax = "proto2";
+option optimize_for = LITE_RUNTIME;
+
+package chat.client;
+
+message LoginReq{
+    required string name = 1; 
+    required int age = 2; 
+    required string uid = 3;
+}
+
